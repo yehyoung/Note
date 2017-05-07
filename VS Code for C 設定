@@ -1,0 +1,90 @@
+# VS Code for C
+
+https://segmentfault.com/q/1010000006781641
+https://cgoder.github.io/2017/03/29/Visual-Studio-Code-compile-c-c/
+http://blog.csdn.net/c_duoduo/article/details/51615381
+http://www.evanlin.com/dive-with-vscode-golang/
+https://hackmd.io/s/rJPKpohsx#偵錯
+https://blogs.msdn.microsoft.com/c/2016/04/18/visual-studio-code%E7%9A%84cc%E6%89%A9%E5%B1%95%E5%8A%9F%E8%83%BD/
+
+-------
+http://www.evanlin.com/dive-with-vscode-golang/
+常用熱鍵:
+(F1 或是 Shift + cmd + p) command palette:
+呼叫出命令列，可以跑一些 IDE 的指令：比如說安裝 extension 那類的．
+(F2) Rename (gorename):
+可以快速幫你把整個專案裡面的變數修改名稱，就像是 VS 跟 XCode 裡面的 Refactor．
+(F5) Debug :
+直接幫你 compile 目前的專案，並且直接進入 debug 模式．就像是 VS 一樣，使用起來相當的方便． 並且可以透過以下的 hot-key 來進行 debug :
+F5 continue
+F10 step over
+F11 step into
+SHIFT+F11 step out (目前 delve 尚未支援)
+SHIFT+F5 stop
+(F8) Go to Next Error or Warning:
+可以快速切到如果有任何 error 或是 warning 的部分． 要切換到前一個，可以試著 (Shift + F8)
+(F12) Go to Definition (godef):
+跳到 function 定義的地方，就如同 VS 裡面的 F12 是相同的．
+(Shift+F12) Show References (guru （俗稱的 oracle) ):
+跳到參考的地方，跟 F12 是成對的． 當你跳到 function 定義的地方，可以透過這個跳回呼叫 function 的地方．
+(Shift+F12) Show References (guru):
+跳到參考的地方，跟 F12 是成對的． 當你跳到 function 定義的地方，可以透過這個跳回呼叫 function 的地方．
+(Cmd + =) 縮放整個畫面：
+Zoom in : Cmd + =, Zoom out: Cmd + -
+(Cmd + Shift + n) 開啟新的 IDE
+當你要開發多個專案（應該超容易使用到），就必需要使用這個 hotkey ．
+----------
+${workspaceRoot} - the path of the folder opened in VS Code
+${workspaceRootFolderName} - the name of the folder opened in VS Code without any slashes (/)
+${file} - the current opened file
+${relativeFile} - the current opened file relative to workspaceRoot
+${fileBasename} - the current opened file's basename
+${fileBasenameNoExtension} - the current opened file's basename with no file extension
+${fileDirname} - the current opened file's dirname
+${fileExtname} - the current opened file's extension
+${cwd} - the task runner's current working directory on startup
+${lineNumber} - the current selected line number in the active file
+----------
+
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Launch (GDB)",                 // 配置名称，将会在启动配置的下拉菜单中显示
+            "type": "cppdbg",                           // 配置类型，这里只能为cppdbg
+            "request": "launch",                        // 请求配置类型，可以为launch（启动）或attach（附加）
+            "launchOptionType": "Local",                // 调试器启动类型，这里只能为Local
+            "targetArchitecture": "x86",                // 生成目标架构，一般为x86或x64，可以为x86, arm, arm64, mips, x64, amd64, x86_64
+            "program": "${file}.exe",                   // 将要进行调试的程序的路径
+            "miDebuggerPath":"a:\\MinGW\\bin\\gdb.exe", // miDebugger的路径，注意这里要与MinGw的路径对应
+            "args": ["blackkitty",  "1221", "# #"],     // 程序调试时传递给程序的命令行参数，一般设为空即可
+            "stopAtEntry": false,                       // 设为true时程序将暂停在程序入口处，一般设置为false
+            "cwd": "${workspaceRoot}",                  // 调试程序时的工作目录，一般为${workspaceRoot}即代码所在目录
+            "externalConsole": true,                    // 调试时是否显示控制台窗口，一般设置为true显示控制台
+            "preLaunchTask": "g++"　　                  // 调试会话开始前执行的任务，一般为编译程序，c++为g++, c为gcc
+        }
+    ]
+}
+
+----------
+
+{
+    "version": "0.1.0",
+    "command": "g++",
+    "args": ["-g","${file}","-o","${file}.exe"],    // 编译命令参数
+    "problemMatcher": {
+        "owner": "cpp",
+        "fileLocation": ["relative", "${workspaceRoot}"],
+        "pattern": {
+            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+        }
+    }
+}
+
+
